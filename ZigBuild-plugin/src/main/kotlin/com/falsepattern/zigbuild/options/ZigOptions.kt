@@ -60,18 +60,14 @@ abstract class ZigOptions {
 
     @Inject
     constructor() {
-        val dirProperty = objectFactory.directoryProperty()
-        dirProperty.set(gradle.gradleUserHomeDir.toPath().resolve("caches").resolve("com.falsepattern.zigbuild").resolve("zig-cache").toFile())
-
-        globalZigCache.convention(dirProperty)
         replaceEnv.convention(false)
     }
 
     @get:Internal
     val cacheDirArgs: Provider<List<String>> get() {
         val args = objectFactory.listProperty<String>()
-        args.addAll(zigCache.map { listOf("--cache-dir", it.asFile.absolutePath) })
-        args.addAll(globalZigCache.map { listOf("--global-cache-dir", it.asFile.absolutePath) })
+        args.addAll(zigCache.map { listOf("--cache-dir", it.asFile.absolutePath) }.orElse(emptyList()))
+        args.addAll(globalZigCache.map { listOf("--global-cache-dir", it.asFile.absolutePath) }.orElse(emptyList()))
         return args
     }
 }

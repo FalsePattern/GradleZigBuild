@@ -35,6 +35,8 @@ abstract class ZigExtension {
 
     var scanSystem: Boolean = true
 
+    var defaultCacheDirs: Boolean = true
+
     @get:Inject
     protected abstract val objectFactory: ObjectFactory
 

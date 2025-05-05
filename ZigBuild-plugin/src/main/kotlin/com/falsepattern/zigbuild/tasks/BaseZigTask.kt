@@ -48,7 +48,6 @@ abstract class BaseZigTask<Options: ZigOptions>: DefaultTask {
 
     @Inject
     constructor(): super() {
-        options.zigCache.convention(project.layout.buildDirectory.dir("zig-cache/${name}"))
         group = "zig"
     }
 

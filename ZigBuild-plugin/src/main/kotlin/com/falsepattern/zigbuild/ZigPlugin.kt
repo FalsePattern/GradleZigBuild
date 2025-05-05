@@ -24,7 +24,6 @@ package com.falsepattern.zigbuild
 
 import com.falsepattern.zigbuild.internal.ZigExtensionInternal
 import com.falsepattern.zigbuild.tasks.BaseZigTask
-import com.falsepattern.zigbuild.toolchain.ZigToolchainProvider
 import com.falsepattern.zigbuild.toolchain.ZigToolchainRepository
 import com.falsepattern.zigbuild.toolchain.ZigToolchainsManagement
 import com.falsepattern.zigbuild.toolchain.internal.DefaultToolchainProvider
@@ -33,15 +32,13 @@ import com.falsepattern.zigbuild.toolchain.internal.ZigToolchainProviderInfo
 import com.falsepattern.zigbuild.toolchain.internal.ZigToolchainRepositoryInternal
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.dsl.ComponentMetadataHandler
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.initialization.Settings
 import org.gradle.api.initialization.resolve.RepositoriesMode
-import org.gradle.api.initialization.resolve.RulesMode
 import org.gradle.api.invocation.Gradle
-import org.gradle.api.model.ObjectFactory
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import javax.inject.Inject
 
@@ -62,6 +59,15 @@ abstract class ZigPlugin @Inject constructor(): Plugin<Any> {
         }
         project.tasks.withType<BaseZigTask<*>> {
             zigCompiler.convention(zigExtension.compilerFor{})
+            val ext = project.extensions.getByType<ZigExtension>()
+            if (ext.defaultCacheDirs) {
+                options {
+                    zigCache.convention(project.layout.buildDirectory.dir("zig-cache/${name}"))
+                    val dirProperty = project.objects.directoryProperty()
+                    dirProperty.set(project.gradle.gradleUserHomeDir.toPath().resolve("caches").resolve("com.falsepattern.zigbuild").resolve("zig-cache").toFile())
+                    globalZigCache.convention(dirProperty)
+                }
+            }
         }
     }
 
