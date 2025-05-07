@@ -1,5 +1,9 @@
 # Gradle ZigBuild
 
+<a rel="license" href="https://www.gnu.org/licenses/lgpl-3.0.en.html"><img alt="LGPLv3 logo" style="border-width:0" src="https://www.gnu.org/graphics/lgplv3-with-text-154x68.png" /></a>
+## Author: FalsePattern
+## License: GNU LGPLv3.0-only
+
 A gradle plugin that adds integration with zig toolchains, and preliminary integration with the zig build system.
 
 ## Setup
